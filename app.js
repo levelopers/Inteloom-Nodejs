@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var mongoose = require('mongoose');
 var MONGO_URL = require('./configs/mongo-config')
+var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 
@@ -16,6 +17,7 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true, useCreateIndex: true, },fun
 });
 
 var app = express();
+app.use(cors())
 
 app.use(logger('dev'));
 app.use(express.json());
