@@ -20,6 +20,10 @@ var productSchema = mongoose.Schema({
 
 var Product = module.exports = mongoose.model('Product', productSchema);
 
-module.exports.getAllProducts = function (query, sort, callback) {
-  Product.find(query, null, sort, callback)
+module.exports.getAllProducts = function (callback) {
+  Product.find(callback)
+}
+
+module.exports.getProductByID = function (id, callback) {
+  Product.findById(id, callback);
 }
