@@ -1,0 +1,1 @@
+module.exports = "mongodb://heroku_6kb5l5b7:yds2192@ds047448.mlab.com:47448/heroku_6kb5l5b7"
