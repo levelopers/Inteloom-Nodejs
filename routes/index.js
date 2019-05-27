@@ -34,15 +34,39 @@ router.get('/product/:id', function (req, res, next) {
 
 // post /checkout
 router.post('/checkout', function (req, res, next) {
-  const {order} = req.body
-  console.log('order', order)
+  const { order } = req.body
   //type check ...
 
   //mail response contet HTML
-  const mail_content=`
+  const { Items, totalPrice, email } = order
+  if(!order || !email){
+    res.status(400).json({
+      status: 400,
+      message: "invalid_field email"
+    })
+  }
+  const mail_content =
+    `
   <h1>Thanks for shopping on ACME</h1>
   <br>
-  ${order.map(p=>`<p>${p.title}</p>`)}
+  <table>
+          <tr>
+            <th>Title</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        ${Items.map(p =>
+      `
+        <tr>
+        <td>${p.title}</td>
+         <td>${p.quantity}</td>
+          <td>$${p.price}</td>
+          </tr>
+          `
+        )}
+        </table>
+  <br>
+  <h3>totalPrice: $${totalPrice}</h3>  
   `
 
   //send mail config
@@ -58,8 +82,8 @@ router.post('/checkout', function (req, res, next) {
   });
   let mailOptions = {
     from: NODEMAILER_CONFIG.username,
-    to: 'youcancallmeallen@gmail.com',
-    subject: 'Test',
+    to: email,
+    subject: 'ACME Shopping order',
     html: mail_content
   };
 
@@ -70,10 +94,10 @@ router.post('/checkout', function (req, res, next) {
     }
     console.log(info);
     res.status(200).json({
-      status:200,
-      message:"send mail success",
-      data:order,
-      info:info
+      status: 200,
+      message: "send mail success",
+      data: order,
+      info: info
     })
   });
 })
